@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+<title>Notes</title>
+{% endblock head %}
+
+{% block body %}
+
+<div x-data="{ inputFieldValue: '' }">
+    <form x-on:submit.prevent="submitForm" hx-post="{% url 'add_note' %}" hx-swap="outerHTML" hx-target=".allnotes">
+        {% csrf_token %}
+        <input type="text" name="note" id="note" x-model="inputFieldValue">
+        <button type="submit">Add</button>
+    </form>
+</div>
+{% include 'all_notes.html' %}
+
+{% endblock body %}
+
+
+<script>
+    function submitForm() {
+        console.log("submitForm")
+        this.inputFieldValue = '';
+    }
+</script>

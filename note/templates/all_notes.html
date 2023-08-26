@@ -1,0 +1,34 @@
+{% load tz %}
+<div class="allnotes">
+    {% if error %}
+    <p id="error-note">{{error}}</p>
+    {% endif %}
+    <div class="box">
+        <ul class="notelist">
+            {% for note in notes  %}
+            <div class="box-item">
+                <form hx-post="{% url 'delete_note' id=note.id %}" hx-swap="outerHTML" hx-target=".allnotes">
+                    <li><b>{{note.title}}</b>
+                        <i>{{note.created_at|timezone:"Asia/Kolkata"|date:"d/m/Y h:i A"}}</i>&nbsp;&nbsp;&nbsp;
+                        {% csrf_token %}
+                        <button class="delete-button">Delete</button>
+                    </li>
+                </form>
+            </div>
+            {% empty %}
+            <div class="box-item">
+                <li id="empty-note">No notes available!</li>
+            </div>
+            {% endfor %}
+        </ul>
+    </div>
+    <div>
+        {% if show_prev %}
+        <button hx-get="{% url 'get_notes' %}?start={{start|add:-10}}" hx-swap="outerHTML"
+            hx-target=".allnotes">PREV</button>
+        {% endif %}
+        {% if show_next %}
+        <button hx-get="{% url 'get_notes' %}?start={{end}}" hx-swap="outerHTML" hx-target=".allnotes">Next</button>
+        {% endif %}
+    </div>
+</div>

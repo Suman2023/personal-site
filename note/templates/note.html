@@ -1,0 +1,15 @@
+{% load tz %}
+{% if error %}
+<p id="error-note" hx-swap-oob="true">{{note.error}}</p>
+{% elif note %}
+<p id="empty-note" hx-swap-oob="true"></p>
+<div class="box-item">
+    <form hx-post="{% url 'delete_note' id=note.id %}" hx-swap="outerHTML" hx-target=".allnotes">
+        <li><b>{{note.title}}</b>
+            <i>{{note.created_at|timezone:"Asia/Kolkata"|date:"d/m/Y h:i A"}}</i>&nbsp;&nbsp;&nbsp;
+            {% csrf_token %}
+            <button class="delete-button">Delete</button>
+        </li>
+    </form>
+</div>
+{% endif %}
